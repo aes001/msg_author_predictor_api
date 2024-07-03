@@ -1,0 +1,10 @@
+{
+    "participants": {
+        "John": 1,
+        "Paul": 2,
+        "George": 3,
+        "Ringo": 4,
+        "Pete": 5
+    },
+    "participant_aliased": {}
+}

@@ -10,16 +10,27 @@ predictorStore = []
 STOP_WORDS = urllib.request.urlopen(
     "https://www.github.com/igorbrigadir/stopwords/blob/master/en/postgresql.txt").read().decode("utf-8").split("\n")
 
+if os.getenv("MODEL_PATH") == None or os.getenv("DEFAULT_MODEL_NAME") == None:
+    model_path = "testData/dummyModel"
+else:
+    model_path = os.getenv("MODEL_PATH") + os.getenv("DEFAULT_MODEL_NAME")
+
+if os.getenv("MODEL_PATH") == None or os.getenv("SECOND_MODEL_NAME") == None:
+    model_path_second = "testData/dummyModel"
+else:
+    model_path_second = os.getenv(
+        "MODEL_PATH") + os.getenv("SECOND_MODEL_NAME")
+
 
 def initializeDefaultPredictor():
-    predictor = Predictor(model_path=os.getenv("MODEL_PATH") + os.getenv("DEFAULT_MODEL_NAME") + "_model.keras", tokenizer_json_path=os.getenv("MODEL_PATH") + os.getenv("DEFAULT_MODEL_NAME") + "_tokenizer.json",
-                          stopwords_list=STOP_WORDS, usernames_json_list=os.getenv("MODEL_PATH") + os.getenv("DEFAULT_MODEL_NAME") + "_users.json")
+    predictor = Predictor(model_path=model_path + "_model.keras", tokenizer_json_path=model_path + "_tokenizer.json",
+                          stopwords_list=STOP_WORDS, usernames_json_list=model_path + "_users.json")
     return predictor
 
 
 def initializeSecondPredictor():
-    predictor = Predictor(model_path=os.getenv("MODEL_PATH") + os.getenv("SECOND_MODEL_NAME") + "_model.keras", tokenizer_json_path=os.getenv("MODEL_PATH") + os.getenv("SECOND_MODEL_NAME") + "_tokenizer.json",
-                          stopwords_list=STOP_WORDS, usernames_json_list=os.getenv("MODEL_PATH") + os.getenv("SECOND_MODEL_NAME") + "_users.json")
+    predictor = Predictor(model_path=model_path_second + "_model.keras", tokenizer_json_path=model_path_second + "_tokenizer.json",
+                          stopwords_list=STOP_WORDS, usernames_json_list=model_path_second + "_users.json")
     return predictor
 
 

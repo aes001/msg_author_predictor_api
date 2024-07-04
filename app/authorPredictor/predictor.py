@@ -7,12 +7,16 @@ class Predictor:
     __user_names = None
     model = None
     tokenizer = None
+    __unseen_token_default_percentage = []
 
     def __init__(self, model_path, tokenizer_json_path, stopwords_list, usernames_json_list):
         self.__load_model(model_path)
         self.__load_tokenizer_json(tokenizer_json_path)
         self.__load_stopwords(stopwords_list)
         self.__load_usernames_json(usernames_json_list)
+
+        self.__unseen_token_default_percentage = self.predict_anon(
+            "w92rf9QHU99824YTALERT2&(279&(2y8baWEU")[0]
 
     def predict(self, text):
         text = self.__clean_text(text)
@@ -22,6 +26,10 @@ class Predictor:
         padded = tf.keras.utils.pad_sequences(sequences, maxlen=250)
 
         prediction = self.model.predict(padded)
+
+        if prediction[0][0] == self.__unseen_token_default_percentage[0]:
+            return "Unseen token"
+
         preds = []
 
         for i, user in enumerate(self.__user_names):

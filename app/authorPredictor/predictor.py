@@ -15,8 +15,12 @@ class Predictor:
         self.__load_stopwords(stopwords_list)
         self.__load_usernames_json(usernames_json_list)
 
+        # Predict a random string to get the default percentage of unseen tokens
+        print("Getting default unseen token percentage for model: " + model_path)
         self.__unseen_token_default_percentage = self.predict_anon(
             "w92rf9QHU99824YTALERT2&(279&(2y8baWEU")[0]
+        print("Default unseen token percentage: " +
+              str(self.__unseen_token_default_percentage))
 
     def predict(self, text):
         text = self.__clean_text(text)
@@ -27,8 +31,11 @@ class Predictor:
 
         prediction = self.model.predict(padded)
 
-        if prediction[0][0] == self.__unseen_token_default_percentage[0]:
+        if all(predictionConfidence == defaultConfidence for predictionConfidence, defaultConfidence in zip(prediction[0], self.__unseen_token_default_percentage)):
             return "Unseen token"
+
+        print(prediction)
+        print(self.__unseen_token_default_percentage)
 
         preds = []
 
@@ -37,6 +44,7 @@ class Predictor:
 
         return preds
 
+    # Do not guard against unseen tokens in this method we use this method to get the default unseen token percentage
     def predict_anon(self, text):
         text = self.__clean_text(text)
 

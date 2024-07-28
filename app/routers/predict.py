@@ -28,9 +28,48 @@ def initializeDefaultPredictor():
     return predictor
 
 
+# def initializeSecondPredictor():
+#     predictor = Predictor(model_path=model_path_second + "_model.keras", tokenizer_json_path=model_path_second + "_tokenizer.json",
+#                           stopwords_list=STOP_WORDS, usernames_json_list=model_path_second + "_users.json")
+#     return predictor
+
 def initializeSecondPredictor():
-    predictor = Predictor(model_path=model_path_second + "_model.keras", tokenizer_json_path=model_path_second + "_tokenizer.json",
-                          stopwords_list=STOP_WORDS, usernames_json_list=model_path_second + "_users.json")
+    class SecondPredictor(Predictor):
+        def __init__(self, model_path, tokenizer_json_path, stopwords_list, usernames_json_list):
+            super().__init__(model_path, tokenizer_json_path,
+                             stopwords_list, usernames_json_list)
+
+        # Overriding the clean_text method because we are using keeping some of the special characters
+        def clean_text(self, message):
+            message = message.replace(".", "")
+            message = message.replace(",", "")
+            message = message.replace(";", " ;")
+            message = message.replace("!", " !")
+            message = message.replace("?", " ?")
+            message = message.replace("(", "( ")
+            message = message.replace(")", " )")
+            message = message.replace("\\", "")
+            message = message.replace("\"", "")
+
+            # remove discord effects
+            message = message.replace("*", "")
+            message = message.replace("_", "")
+            message = message.replace("~", "")
+            message = message.replace("`", "")
+            message = message.replace(">", "")
+            message = message.replace("<", "")
+            message = message.replace("||", "")
+            message = message.replace("```", "")
+            message = message.replace("~~", "")
+            message = message.replace(":", "")
+            message = message.replace("#", "")
+            message = message.replace("@", "")
+
+            return message
+
+    predictor = SecondPredictor(model_path=model_path_second + "_model.keras", tokenizer_json_path=model_path_second + "_tokenizer.json",
+                                stopwords_list=STOP_WORDS, usernames_json_list=model_path_second + "_users.json")
+
     return predictor
 
 

@@ -23,7 +23,7 @@ class Predictor:
               str(self.__unseen_token_default_percentage))
 
     def predict(self, text):
-        text = self.__clean_text(text)
+        text = self.clean_text(text)
 
         sequences = self.tokenizer.texts_to_sequences([text])
 
@@ -46,7 +46,7 @@ class Predictor:
 
     # Do not guard against unseen tokens in this method we use this method to get the default unseen token percentage
     def predict_anon(self, text):
-        text = self.__clean_text(text)
+        text = self.clean_text(text)
 
         sequences = self.tokenizer.texts_to_sequences([text])
 
@@ -78,7 +78,7 @@ class Predictor:
             temp = json.load(users_file)
             self.__user_names = temp['participants']
 
-    def __clean_text(self, message):
+    def clean_text(self, message):
         message = message.replace(".", "")
         message = message.replace(",", "")
         message = message.replace(";", "")
